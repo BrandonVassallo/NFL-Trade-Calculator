@@ -7,6 +7,7 @@ Docstring for TradeCalculator:
 
 """
 
+import os
 
 
 """
@@ -34,7 +35,7 @@ THINGS TO STLL DO:
 # which should be found in this folder  #
 #########################################
 
-def reset_Trade_chart(rawdata: str):
+def reset_Trade_chart(rawdata_path: str):
     """
     Resets the file TradeChart.csv to its readable form
     
@@ -45,8 +46,11 @@ def reset_Trade_chart(rawdata: str):
     # Openning files
     ##########################################
 
-    file_f = open(f"TradeCalculator\\{rawdata}","r")
-    file_TC = open(f"TradeCalculator\\TradeChart.csv","w")
+    pyfile_dir = os.path.dirname(__file__)                  # Finds the directory that the python file is currently in
+    file_TC_path = os.path.join(pyfile_dir, "TradeChart.csv")   # Appends either the raw, or current file name to it
+
+    file_RAW = open(f"{rawdata_path}","r")
+    file_TC = open(f"{file_TC_path}","w")
 
     pick_chart = []
 
@@ -55,7 +59,7 @@ def reset_Trade_chart(rawdata: str):
     #########################################################
 
     while cur_line != "":
-        cur_line = file_f.readline()
+        cur_line = file_RAW.readline()
         cur_line = cur_line.split()
 
         '''
@@ -109,7 +113,7 @@ def reset_Trade_chart(rawdata: str):
     for i in range(len(sort_picks)):
         file_TC.write(f"{sort_picks[i][0]},{sort_picks[i][1]}\n")
     
-    file_f.close()
+    file_RAW.close()
     file_TC.close()
 
 
@@ -128,13 +132,14 @@ def total_draft_value(refine_fn: str, team: str):
     # Fetching the pick value list
     ##########################################
 
-    file_TC = open(f"TradeCalculator\\{refine_fn}","r")
+    file_TC = open(f"{refine_fn}","r")
     all_pik_vals = []
     Fpick_list = [142,57,18,8,4,1,1]
     line = file_TC.readline()
     while line != "":
         line = line.split(",")
         all_pik_vals += [line]
+        line = file_TC.readline()
     picks_confirm = False
 
     ##########################################
@@ -193,7 +198,10 @@ def total_draft_value(refine_fn: str, team: str):
             i = 0
             while not found:
                 if pik == all_pik_vals[i][0]:
-                    team_tot += int(all_pik_vals[i][1])
+                    team_tot += int(all_pik_vals[i][1])     
+                    # POSSIBLE ISSUE: all_pik_vals[i][1] will look like "<pick val>\n"
+                    #       --> Make sure to cut out the \n before casting to an int
+                    
                     found = True
                 i += 1  
 
@@ -236,7 +244,12 @@ def total_draft_value(refine_fn: str, team: str):
 
 def calculation(refine_fn: str):
     
-    file_TC = open(f"TradeCalculator\\{refine_fn}","r")     # Open the pick value file for pick comparison
+    file_TC = open(f"{refine_fn}","r")     # Open the pick value file for pick comparison
+
+    print("--------------------------------------------------------------------------")
+    print(f"This file is being used for calculating the trades:  {refine_fn}")
+    print("--------------------------------------------------------------------------")
+
 
     ####################################
     # Prompting for Team 1 picks
@@ -343,7 +356,9 @@ def read_picks(picks: list):
     pass
 
 def main():
+
     start = input("TRADE CALCULATOR 1.0   ")
+    pyfile_dir = os.path.dirname(__file__)          # Finds the directory that the python file is currently in
     if start == "RESET":
         print("Make sure your files are in the folder: TradeCalculator, and has no commas")
         print("A File named TradeChart.csv will be overwritten if it exists")
@@ -351,8 +366,12 @@ def main():
         checked = False
         while not checked:
             if start == "Y":
+
                 raw = input("RAW DATA FILE NAME:   ")
-                reset_Trade_chart(raw)
+                full_file_RAW_path = pyfile_dir.join(raw)       # Appends the data file into the datapath
+
+                reset_Trade_chart(full_file_RAW_path)
+
                 print()
                 print("FINISHED RESET")
                 print()
@@ -366,7 +385,9 @@ def main():
                 checked = True
             else:
                 print("NOT A VALID ANSWER")
-    calculation("TradeChart.csv")
+
+    full_file_TC_path = os.path.join(pyfile_dir, "TradeChart.csv")   # Appends either the raw, or current file name to it
+    calculation(full_file_TC_path)
 
 
 if __name__ == "__main__":
