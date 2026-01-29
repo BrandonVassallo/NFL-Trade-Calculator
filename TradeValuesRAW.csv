@@ -1,0 +1,45 @@
+1  CHI	1000  33  BUF	180	  65  NYJ	78	  101  CAR	34	  136  SEA	16	  177  MIN	8	  221  BUF	3
+2  WAS	717	  34  NE	175	  66  ARI	76	  102  DEN	34	  137  LAC	16	  178  PIT	8	  222  WAS	3
+3  NE	514	  35  ARI	170	  67  WAS	75	  103  NE	33	  138  ARI	15	  179  SEA	8	  223  LV	3
+4  ARI	491	  36  WAS	166	  68  NE	73	  104  ARI	33	  139  WAS	15	  180  NE	8	  224  CIN	3
+5  LAC	468	  37  LAC	162	  69  LAC	71	  105  LAC	32	  140  LAC	15	  181  LAC	8	  225  LAC	3
+6  NYG	446	  38  TEN	157	  70  NYG	70	  106  TEN	32	  141  BUF	14	  182  TEN	7	  226  ARI	3
+7  TEN	426	  39  CAR	153	  71  ARI	68	  107  NYG	31	  142  IND	14	  183  NYG	7	  227  CLE	3
+8  ATL	406	  40  WAS	149	  72  CAR	67	  108  MIN	30	  143  ATL	14	  184  MIA	7	  228  BAL	3
+9  CHI	387	  41  GB	146	  73  DAL	65	  109  ATL	30	  144  CHI	13	  185  PHI	7	  229  LV	2
+10  MIN	369	  42  HOU	142	  74  ATL	64	  110  NE	29	  145  DEN	13	  186  ATL	7	  230  MIN	2
+11  NYJ	358	  43  ATL	138	  75  CHI	63	  111  GB	28	  146  TEN	13	  187  ATL	6	  231  NE	2
+12  DEN	347	  44  LV	135	  76  DEN	61	  112  LV	28	  147  DEN	13	  188  HOU	6	  232  MIN	2
+13  LV	336	  45  NO	131	  77  LV	60	  113  BAL	27	  148  LV	12	  189  DET	6	  233  DAL	2
+14  NO	325	  46  IND	128	  78  HOU	59	  114  JAX	26	  149  CIN	12	  190  PHI	6	  234  IND	2
+15  IND	315	  47  NYG	124	  79  IND	57	  115  CIN	26	  150  NO	12	  191  ARI	6	  235  DEN	2
+16  SEA	305	  48  JAX	121	  80  CIN	56	  116  JAX	25	  151  IND	12	  192  SEA	6	  236  JAX	2
+17  MIN	296	  49  CIN	118	  81  SEA	55	  117  IND	25	  152  PHI	11	  193  NE	6	  237  CIN	2
+18  CIN	287	  50  PHI	115	  82  ARI	54	  118  SEA	24	  153  JAX	11	  194  CIN	6	  238  HOU	2
+19  LAR	278	  51  PIT	112	  83  LAR	52	  119  PIT	24	  154  LAR	11	  195  PIT	5	  239  NO	2
+20  PIT	269	  52  LAR	109	  84  PIT	51	  120  MIA	23	  155  PHI	11	  196  LAR	5	  240  CAR	2
+21  MIA	261	  53  PHI	106	  85  CLE	50	  121  SEA	23	  156  CLE	11	  197  ATL	5	  241  MIA	1
+22  PHI	253	  54  CLE	104	  86  SF	49	  122  CHI	22	  157  CAR	11	  198  MIA	5	  242  TEN	1
+23  JAX	245	  55  MIA	101	  87  DAL	48	  123  HOU	21	  158  MIA	10	  199  NO	5	  243  CLE	1
+24  DET	237	  56  DAL	98	  88  GB	47	  124  SF	21	  159  KC	10	  200  CAR	5	  244  DAL	1
+25  GB	230	  57  TB	96	  89  TB	46	  125  TB	20	  160  BUF	10	  201  IND	5	  245  GB	1
+26  TB	223	  58  GB	93	  90  ARI	45	  126  DET	20	  161  WAS	10	  202  GB	5	  246  TB	1
+27  ARI	216	  59  HOU	91	  91  GB	44	  127  PHI	19	  162  ARI	10	  203  MIN	5	  247  HOU	1
+28  KC	209	  60  BUF	88	  92  TB	43	  128  BUF	19	  163  GB	10	  204  BUF	4	  248  KC	1
+29  DAL	202	  61  DET	86	  93  BAL	42	  129  SF	18	  164  IND	10	  205  HOU	4	  249  HOU	1
+30  BAL	196	  62  BAL	84	  94  PHI	41	  130  BAL	18	  165  BAL	9	  206  CLE	4	  250  BAL	1
+31  SF	190	  63  SF	82	  95  BUF	40	  131  KC	18	  166  NYG	9	  207  SEA	4	  251  SF	1
+32  CAR	184	  64  KC	80	  96  JAX	39	  132  DET	17	  167  JAX	9	  208  LV	4	  252  TEN	1
+       		    		      97  CIN	38	  133  KC	17	  168  BUF	9	  209  LAR	4	  253  LAC	1
+    		    		      98  PIT	37	  134  NYJ	17	  169  GB	9	  210  DET	4	  254  LAR	1
+    		    		      99  LAR	36	  135  SF	16	  170  NO	9	  211  KC	4	  255  GB	1
+    		    		      100  WAS	35	    		      171  NYJ	9	  212  JAX	4	  256  DEN	1
+    		    		    		    		              172  PHI	9	  213  LAR	4	  257  NYJ	1
+    		    		    		    		              173  NYJ	9	  214  CIN	4	    	
+    		    		    		    		              174  DAL	8	  215  SF	4	    	
+    		    		    		    		              175  NO	8	  216  DAL	3	    	
+    		    		    		    		              176  NYJ	8	  217  LAR	3	    	
+    		    		    		    		    		                  218  BAL	3	    	
+                                                                              219  BUF	3	    	
+                                                                              220  TB	3	    
+
