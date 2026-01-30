@@ -15,9 +15,9 @@ THINGS TO STLL DO:
 
 1) Implement a Future Pick ability into total_draft_value()
 
-2) Implement the read_picks() method, and add its calls where necessary
+2) 
 
-3) Fix the open() methods
+3) 
 
 4) Test/Debug the program
 
@@ -145,7 +145,9 @@ def total_draft_value(refine_fn: str, team: str):
         ]
     '''
 
-    Fpick_list = [142,57,18,8,4,1,1]
+    Fpick_list = [(142, "Future 1st Round Pick"),(57, "Future 2nd Round Pick"),(18, "Future 3rd Round Pick"),
+                  (8, "Future 4th Round Pick"),(4, "Future 5th Round Pick"),(1, "Future 6th Round Pick"),
+                  (1, "Future 7th Round Pick")]
     line = file_TC.readline()
     while line != "":
         line = line.split(",")
@@ -158,13 +160,25 @@ def total_draft_value(refine_fn: str, team: str):
     ##########################################
     while picks_confirm == False:
         team_picks = []
+        team_future_picks = []
+        team_future_picks_value = 0
         input_pick = input(f"What pick is {team} willing to trade?\n *For future picks, type FP to prompt the addition of a future pick  ")
         while input_pick != "N":
             if input_pick[0] == "F" and input_pick[1] == "P":         # Is this a future pick?
-                Fpick1 = input("What round will this pick be? (Min 1, Max 7, Type 0 to cancel)    ")
+                future_pick_input = input("What round will this pick be? (Min 1, Max 7, Type 0 to cancel)    ")
                 try:
-                    int(Fpick1)
-                    
+                    future_pick_input = int(future_pick_input)
+                    if future_pick_input < 0 or future_pick_input > 7:
+                        print()
+                        print("Please select a round between 1 and 7")
+                        print()    
+                        input_pick = "FP"    # Sends the prompt back to asking for what round for the future pick
+                    elif future_pick_input == 0:        # An input of 0 canceles the selection of a future pick
+                        print()
+                        print("FUTURE PICK SELECTION CANCELED")
+                    else:
+                        team_future_picks += [Fpick_list[future_pick_input-1][1]]
+                        team_future_picks_value += Fpick_list[future_pick_input-1][0]
                 except ValueError:
                     print()
                     print("The round needs to be a number, dork")
@@ -189,17 +203,11 @@ def total_draft_value(refine_fn: str, team: str):
                     print()
                     print("The pick needs to be a number, dork")
                     print()
-            if input_pick != None:
+            if input_pick != None and isinstance(input_pick, int):
                 team_picks += [input_pick]
             print()
             input_pick = input(f"What other pick is {team} willing to trade? (Respond with N when finished)\n *For future picks, type FP to prompt the addition of a future pick  ")
 
-        """
-        USE read_picks() TO DISPLAY THE SELECTED PICKS
-            
-        """
-
-        read_picks(team_picks)
 
         ##########################################
         # Calculating the total value of all picks
@@ -218,6 +226,16 @@ def total_draft_value(refine_fn: str, team: str):
                         team_tot += int(all_pik_vals[i][1][:-1])        # The [:-1] will take off the last character in the string, which is "\n"              
                     found = True
                 i += 1  
+        
+        team_picks.extend(team_future_picks)
+        team_tot += team_future_picks_value
+
+        """
+        USE read_picks() TO DISPLAY THE SELECTED PICKS
+            
+        """
+
+        read_picks(team_picks)
 
         ##########################################
         # Confirming the picks selected
@@ -228,6 +246,7 @@ def total_draft_value(refine_fn: str, team: str):
         final_confirm = False
         while final_confirm == False:
             if confirmation == "Y" or confirmation == "y":
+                print()
                 print(f"Picks for the {team} CONFIRMED")
                 final_confirm = True
                 picks_confirm = True
@@ -297,20 +316,26 @@ def calculation(refine_fn: str):
             winning_team = team1
         else:
             winning_team = team2
-        print(f"{winning_team} wins the trade with {pick_dif} points in difference")
+        print(f"\n{winning_team} wins the trade with {abs(pick_dif)} points in difference")
+        print("\nThis is equivalent to the below package:")
         tie = False
     else:
-        print(f"This trade is perfectly symetrical, no one wins and no one loses")
+        print()
+        print("----------------------------------------------------------------")
+        print(f"\nThis trade is perfectly symetrical, no one wins and no one loses")
+        print("----------------------------------------------------------------")
+        print()
         tie = True
 
     ####################################
     # By how much?
     ####################################
     if not tie:
-        pick_val = file_TC.readline()   # AN ARRAY: [Pick #, Pick Value]
+        pick_val_line = file_TC.readline()   
+        pick_val = pick_val_line.split(",")     # AN ARRAY: [Pick #, Pick Value]
         future_pick_list = [(18, "Future 3rd Round Pick"),(8, "Future 4th Round Pick"), (4, "Future 5th Round Pick"),(1, "Future 6th/7th Round Pick")] 
         picks_finished = False
-        curr_pick_dif = pick_dif
+        curr_pick_dif = abs(pick_dif)
         total_pick_dif_nums = []
 
         # Find the value of the pick(s) that represents the winning difference
@@ -318,7 +343,7 @@ def calculation(refine_fn: str):
             if curr_pick_dif == 0:
                 picks_finished = True
 
-            elif curr_pick_dif >= pick_val[1]:
+            elif curr_pick_dif >= int(pick_val[1][:-1]):
                 # We can use the current pick to represent some of the pick differential
                 # Add the current pick_val's pick number to the total_pick_dif_nums array and
                 # Subtract the pick_val's pick value from the curr_pick_dif
@@ -330,18 +355,21 @@ def calculation(refine_fn: str):
                             total_pick_dif_nums += future_pick[1]
                             curr_pick_dif -= future_pick[0]
                 else:
-                    total_pick_dif_nums += pick_val[0]
-                    curr_pick_dif -= pick_val[1]
+                    total_pick_dif_nums += [int(pick_val[0])]
+                    curr_pick_dif -= int(pick_val[1][:-1])
                 
             else:
                 # The current state of the pick differential constant is too small to subtract any more picks
                 # Therefore, use readline() to move onto the next pick
-                pick_val = file_TC.readline()
+                pick_val_line = file_TC.readline()
+                pick_val = pick_val_line.split(",")     # AN ARRAY: [Pick #, Pick Value]
 
         """
         USE read_picks() TO DISPLAY THE PICK DIFFERENCE
         
         """
+
+        read_picks(total_pick_dif_nums)
 
     file_TC.close()
 
