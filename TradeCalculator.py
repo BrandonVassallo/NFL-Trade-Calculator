@@ -92,7 +92,7 @@ def reset_Trade_chart(rawdata_path: str):
     # Sorting the picks using bubble sort
     ##########################################
 
-    def sort(list):
+    def bub_sort(list):
         finished = False
         while not finished:     # While the list is not sorted (When finished becomes true in the conditional below, the loop will end)
             finished = True     # Sets the list to finish if no changes are made
@@ -108,7 +108,7 @@ def reset_Trade_chart(rawdata_path: str):
                     pass
         return list
 
-    sort_picks = sort(pick_chart)
+    sort_picks = bub_sort(pick_chart)
 
     for i in range(len(sort_picks)):
         file_TC.write(f"{sort_picks[i][0]},{sort_picks[i][1]}\n")
@@ -134,6 +134,17 @@ def total_draft_value(refine_fn: str, team: str):
 
     file_TC = open(f"{refine_fn}","r")
     all_pik_vals = []
+
+    '''
+    all_pik_vals is an array of lists, which each list inside the array representing a pick number,
+    and it's values as shown below:
+
+        [['1', '1000\n']
+         ['2', '717\n"]
+         [...]
+        ]
+    '''
+
     Fpick_list = [142,57,18,8,4,1,1]
     line = file_TC.readline()
     while line != "":
@@ -162,15 +173,14 @@ def total_draft_value(refine_fn: str, team: str):
 
                     ''' ######################################### '''
                     '''   NEEDS TO BE IMPLEMENTED: Future Picks   '''
-                    # Test if commit/push works
                     ''' ######################################### '''
 
                 
 
             else:       # Its a regular pick
                 try:
-                    int(input_pick)
-                    if input_pick >= len(all_pik_vals) or input_pick <= 0:
+                    input_pick = int(input_pick)
+                    if input_pick > len(all_pik_vals) or input_pick <= 0:
                         print()
                         print("THIS PICK DOES NOT EXIST")
                         print()
@@ -189,20 +199,23 @@ def total_draft_value(refine_fn: str, team: str):
             
         """
 
+        read_picks(team_picks)
+
         ##########################################
         # Calculating the total value of all picks
         ##########################################
 
         team_tot = 0
         for pik in team_picks:
+            
             found = False
             i = 0
             while not found:
-                if pik == all_pik_vals[i][0]:
-                    team_tot += int(all_pik_vals[i][1])     
-                    # POSSIBLE ISSUE: all_pik_vals[i][1] will look like "<pick val>\n"
-                    #       --> Make sure to cut out the \n before casting to an int
-                    
+                if str(pik) == all_pik_vals[i][0]:      
+                    if pik == 257:
+                        team_tot = int(all_pik_vals[i][1])              # The pick 257's value string does not have an "\n"
+                    else:
+                        team_tot += int(all_pik_vals[i][1][:-1])        # The [:-1] will take off the last character in the string, which is "\n"              
                     found = True
                 i += 1  
 
@@ -220,7 +233,11 @@ def total_draft_value(refine_fn: str, team: str):
                 picks_confirm = True
                 
             elif confirmation == "N" or confirmation == "n":
+                print()
+                print("________________________________________________________________")
                 print(f"Resetting the picks for the {team}...")
+                print("________________________________________________________________")
+                print()
                 final_confirm = True
                 picks_confirm = False
 
@@ -341,7 +358,7 @@ def calculation(refine_fn: str):
 def read_picks(picks: list):
 
     ''' 
-    FUTURE IMPLIMENTATION NOTES:
+    IMPLIMENTATION NOTES:
         1) The picks in the "picks" list will be integers if they are specific picks, but strings if they are future picks.
         The strings provided by future picks should simply be displayed if they are found within the picks array
 
@@ -353,8 +370,80 @@ def read_picks(picks: list):
             Anything beyond Round 4 should be referenced as future picks (*see calculation method)
 
     '''
+    
+    ####################################
+    # Split the lists into current and
+    # future picks for sorting
+    ####################################
+    
+    current_picks = []
+    future_picks = []
+    error_picks = []
+    for pick in picks:
+        if isinstance(pick, str):       # The pick is a future pick
+            future_picks += [pick]
+        elif isinstance(pick, int):
+            current_picks += [pick]
+        else:
+            error_picks += [f"ERROR: This pick, [{pick}] is not valid"]
 
-    pass
+    ####################################
+    # Sort each list
+    ####################################
+
+    current_picks.sort()
+
+    finished = False
+    while not finished:                             # While the list is not sorted (When finished becomes true in the conditional below, the loop will end)
+        finished = True                             # Sets the list to finish if no changes are made
+        for i in range(len(future_picks)):          # Starts a loop to evaluate the entire list
+            future_pick_number = int(future_picks[i][7:-13])       # Isolates the future pick number
+            if i+1 == len(future_picks):                    # If the next index is not defined, ignore any of the code (Helps prevent evaluation of an unidentified index)
+                pass
+            elif future_pick_number > int(future_picks[i+1][7:-13]): # If the value is larger than the next value
+                x = future_picks[i]                         # This garbage switches the two values
+                future_picks [i] = future_picks[i+1]
+                future_picks[i+1] = x
+                finished = False                    # Tells the program to re-evaluate the entire list again
+            else:
+                pass
+
+    ####################################
+    # Add the Pick Rounds into the full
+    # print array
+    ####################################
+
+    print_array = []
+    for pick in current_picks:
+        if pick <= 32:
+            print_array += [f"[{pick}] --> No. {pick} in the 1st round"]
+        elif pick <= 64:
+            print_array += [f"[{pick}] --> No. {pick-32} in the 2nd round"]
+        elif pick <= 102:
+            print_array += [f"[{pick}] --> No. {pick-64} in the 3rd round"]
+        elif pick <= 138:
+            print_array += [f"[{pick}] --> No. {pick-102} in the 4th round"]
+        elif pick <= 176:
+            print_array += [f"[{pick}] --> No. {pick-138} in the 5th round"]
+        elif pick <= 216:
+            print_array += [f"[{pick}] --> No. {pick-176} in the 6th round"]
+        else:
+            print_array += [f"[{pick}] --> No. {pick-216} in the 7th round"]
+
+    print_array.extend(future_picks)
+    print_array.extend(error_picks)
+
+    print()
+    print("----------------------------------------------------------------")
+    print("TOTAL PACKAGE:")
+    print()
+
+    for pick_str in print_array:
+        print(pick_str + "\n")
+
+    print()
+    print("----------------------------------------------------------------")
+    print()
 
 def main():
 
