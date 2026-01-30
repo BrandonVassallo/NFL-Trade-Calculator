@@ -352,7 +352,7 @@ def calculation(refine_fn: str):
                     # future picks instead of current picks, as duplicate pick values begin to show up around this area.
                     for future_pick in future_pick_list:
                         if curr_pick_dif >= future_pick[0]:
-                            total_pick_dif_nums += future_pick[1]
+                            total_pick_dif_nums += [future_pick[1]]
                             curr_pick_dif -= future_pick[0]
                 else:
                     total_pick_dif_nums += [int(pick_val[0])]
@@ -425,7 +425,10 @@ def read_picks(picks: list):
     while not finished:                             # While the list is not sorted (When finished becomes true in the conditional below, the loop will end)
         finished = True                             # Sets the list to finish if no changes are made
         for i in range(len(future_picks)):          # Starts a loop to evaluate the entire list
-            future_pick_number = int(future_picks[i][7:-13])       # Isolates the future pick number
+            if len(future_picks[i]) == 25:
+                future_pick_number = int(future_picks[i][7:-17])       # Isolates the future pick number
+            else:
+                future_pick_number = int(future_picks[i][7:-13])       # Isolates the future pick number
             if i+1 == len(future_picks):                    # If the next index is not defined, ignore any of the code (Helps prevent evaluation of an unidentified index)
                 pass
             elif future_pick_number > int(future_picks[i+1][7:-13]): # If the value is larger than the next value
