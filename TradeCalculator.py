@@ -509,6 +509,9 @@ def main():
 
     full_file_TC_path = os.path.join(pyfile_dir, "TradeChart.csv")   # Appends either the raw, or current file name to it
     calculation(full_file_TC_path)
+    print()
+    print("Press any key to continue...")
+    input()         # Pauses the program and waits for user input
 
 
 if __name__ == "__main__":
