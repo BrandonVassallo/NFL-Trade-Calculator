@@ -162,7 +162,7 @@ def total_draft_value(refine_fn: str, team: str):
         team_picks = []
         team_future_picks = []
         team_future_picks_value = 0
-        input_pick = input(f"What pick is {team} willing to trade?\n *For future picks, type FP to prompt the addition of a future pick  ")
+        input_pick = input(f"What pick are the {team} willing to trade?\n *For future picks, type FP to prompt the addition of a future pick  ")
         while input_pick != "N":
             if input_pick[0] == "F" and input_pick[1] == "P":         # Is this a future pick?
                 future_pick_input = input("What round will this pick be? (Min 1, Max 7, Type 0 to cancel)    ")
@@ -431,13 +431,21 @@ def read_picks(picks: list):
                 future_pick_number = int(future_picks[i][7:-13])       # Isolates the future pick number
             if i+1 == len(future_picks):                    # If the next index is not defined, ignore any of the code (Helps prevent evaluation of an unidentified index)
                 pass
-            elif future_pick_number > int(future_picks[i+1][7:-13]): # If the value is larger than the next value
-                x = future_picks[i]                         # This garbage switches the two values
-                future_picks [i] = future_picks[i+1]
-                future_picks[i+1] = x
-                finished = False                    # Tells the program to re-evaluate the entire list again
             else:
-                pass
+                if len(future_picks[i+1]) == 25:
+                    # THE NEXT FUTURE PICK IS A 6th/7th
+                    if future_pick_number > int(future_picks[i+1][7:-17]): # If the value is larger than the next value
+                        x = future_picks[i]                         # This garbage switches the two values
+                        future_picks [i] = future_picks[i+1]
+                        future_picks[i+1] = x
+                        finished = False                    # Tells the program to re-evaluate the entire list again
+                else:
+                    # THE NEXT FUTURE PICK IS A single round
+                    if future_pick_number > int(future_picks[i+1][7:-13]): # If the value is larger than the next value
+                        x = future_picks[i]                         # This garbage switches the two values
+                        future_picks [i] = future_picks[i+1]
+                        future_picks[i+1] = x
+                        finished = False                    # Tells the program to re-evaluate the entire list again
 
     ####################################
     # Add the Pick Rounds into the full
